@@ -1,0 +1,22 @@
+import { Request, Response } from "express";
+
+import loginUserService from "../../services/user/loginUser.service";
+
+const loginUserController = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+
+    const token = await loginUserService({ email, password });
+
+    return res.status(200).json({ token: token });
+  } catch (error) {
+    if (error instanceof Error) {
+      return res.status(409).json({
+        error: error.name,
+        message: error.message,
+      });
+    }
+  }
+};
+
+export default loginUserController;
